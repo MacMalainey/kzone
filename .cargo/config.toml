@@ -1,0 +1,3 @@
+[env]
+KIDZONE_CONFIG= { value = "config.json", relative = true }
+KIDZONE_STATIC= { value = "static", relative = true }

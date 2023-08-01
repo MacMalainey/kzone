@@ -1,0 +1,21 @@
+{
+    "eventId": "527576",
+    "locations": {
+        "1114489" : {
+            "prefferedName": "2's - Pre K",
+            "order": 0
+        },
+        "1114490": {
+            "prefferedName": "JK & SK",
+            "order": 1
+        },
+        "1293650": {
+            "prefferedName": "Grade 1-3",
+            "order": 2
+        },
+        "1114487": {
+            "prefferedName": "Grade 4-5",
+            "order": 3
+        }
+    }
+}
