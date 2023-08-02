@@ -126,8 +126,19 @@ fn listen(ctxt: &State<Context>) -> EventStream![Event + '_] {
 #[launch]
 fn rocket() -> _ {
     dotenv::dotenv().unwrap();
+    
+    let exe_path = env::current_exe().unwrap();
+    let exe_dir = exe_path.parent().unwrap();
 
-    let config = load_config(&env::var("KIDZONE_CONFIG").unwrap());
+    let config_path = env::var("KIDZONE_CONFIG").unwrap_or(
+        String::from(exe_dir.join("config.json").to_str().unwrap())
+    );
+
+    let static_path = env::var("KIDZONE_STATIC").unwrap_or(
+        String::from(exe_dir.join("static").to_str().unwrap())
+    );
+
+    let config = load_config(&config_path);
     let client = build_client();
     let event_time = fetch_current_event_times(&client, &config.event_id).unwrap();
     let mut locations = HashMap::<String, Location>::with_capacity(config.locations.len());
@@ -172,5 +183,5 @@ fn rocket() -> _ {
     rocket::build()
         .manage(context)
         .mount("/", routes![index, listen])
-        .mount("/static", FileServer::from(env::var("KIDZONE_STATIC").unwrap()))
+        .mount("/static", FileServer::from(static_path))
 }
