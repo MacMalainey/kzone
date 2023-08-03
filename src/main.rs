@@ -125,10 +125,12 @@ fn listen(ctxt: &State<Context>) -> EventStream![Event + '_] {
 
 #[launch]
 fn rocket() -> _ {
-    dotenv::dotenv().unwrap();
-    
     let exe_path = env::current_exe().unwrap();
     let exe_dir = exe_path.parent().unwrap();
+
+    if dotenv::dotenv().is_err() {
+        dotenv::from_path(exe_dir.join(".env").to_str().unwrap()).unwrap()
+    }
 
     let config_path = env::var("KIDZONE_CONFIG").unwrap_or(
         String::from(exe_dir.join("config.json").to_str().unwrap())
