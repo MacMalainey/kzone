@@ -10,6 +10,7 @@ use rocket::tokio::sync::watch::{channel, Sender};
 use reqwest::header;
 
 use std::collections::HashMap;
+use std::path::PathBuf;
 use std::time::Duration;
 use std::env;
 
@@ -97,7 +98,14 @@ fn fetch_location(client: &Client, ev_id: &str, loc_id: &str) -> Result<(String,
 
 #[get("/")]
 async fn index() -> Result<NamedFile, std::io::Error> {
-    NamedFile::open("static/index.html").await
+    let exe_path = env::current_exe().unwrap();
+    let exe_dir = exe_path.parent().unwrap();
+
+    let static_path = env::var("KIDZONE_STATIC").unwrap_or(
+        String::from(exe_dir.join("static").to_str().unwrap())
+    );
+
+    NamedFile::open(PathBuf::from(static_path).join("index.html")).await
 }
 
 #[get("/listen")]
